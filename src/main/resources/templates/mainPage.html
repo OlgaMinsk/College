@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Main page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/css/styles.css">
+    <meta name="author" content="Volha Suprun">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<h2>Welcome to College!</h2>
+<h4>
+    <p th:text="'Number of students in the College: '+${count}"></p>
+</h4>
+<a class="me-3 py-2 text-dark text-decoration-none" href="/pageOfStudents">Students list</a>
+&nbsp   &nbsp
+<a class="me-3 py-2 text-dark text-decoration-none" href="/pageOfSubjects">Subjects list</a>
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Add new student</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/css/styles.css">
+    <meta name="author" content="Volha Suprun">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<h1>Subjects list of student:</h1>
+<h2 th:text="${student.getName()} + ' ' + ${student.getSurname()}"></h2>
+<p th:text="${message}?${message}:'' " class="red"></p>
+<table>
+    <tbody>
+    <div th:each="subject:${subjects}">
+
+        <div th:with="id='delete'+ ${subject.getId()}, idHref='#'+${id}">
+            <div th:id="${id}" class="blackout">
+                <div class="window">Do you want to delete the subject?<br>
+                    <a href="#" class="close">No</a>
+                    <form action="/deleteSubjectOfStudent" method="post">
+                        <input type="hidden" name="studentId" th:value="${student.getId()}"/>
+                        <input type="hidden" name="subjectId" th:value="${subject.getId()}"/>
+                        <input value="Yes" type="submit"/>
+                    </form>
+                </div>
+            </div>
+            <div>
+
+                <tr>
+                    <td><p th:text="${subject.getName()}"></p></td>
+                    <td><p>&nbsp<a th:href="${idHref}">Delete</a>&nbsp</p></td>
+                </tr>
+            </div>
+        </div>
+    </div>
+    </tbody>
+</table>
+<a th:href="@{/addSubjectToStudent/{id}(id=${student.getId()})}">Add subject</a>
+<p></p>
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+
+</html>

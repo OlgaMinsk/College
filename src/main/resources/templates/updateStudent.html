@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update student</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<h1>Update new student</h1>
+<div th:each="us:${student}">
+    <form method="post">
+       <!-- <input type="hidden" name="id" th:value="${us.id}"> -->
+        <input type="text" name="name" th:value="${us.name}">
+        <input type="text" name="surname" th:value="${us.surname}">
+        <button type="submit">Update</button>
+    </form>
+</div>
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+
+</html>
