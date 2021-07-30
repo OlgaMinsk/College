@@ -1,0 +1,17 @@
+CREATE TABLE `college`.`marks` (
+  `id` BIGINT NOT NULL,
+  `mark` VARCHAR(5) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('1', '1');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('2', '2');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('3', '3');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('4', '4');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('5', '5');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('6', '6');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('7', '7');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('8', '8');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('9', '9');
+INSERT INTO `college`.`marks` (`id`, `mark`) VALUES ('10', '10');
+
