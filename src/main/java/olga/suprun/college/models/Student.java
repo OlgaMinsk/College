@@ -28,16 +28,24 @@ public class Student {
     }
 
     @OneToMany(mappedBy = "student",
-    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private Set<StudentSubject> subjects = new HashSet<>();
 
-    private void addSubject(Subject subject) {
+    public Set<StudentSubject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(Set<StudentSubject> subjects) {
+        this.subjects = subjects;
+    }
+/*
+    public void addSubject(Subject subject) {
         StudentSubject studentSubject = new StudentSubject(this, subject);
         subjects.add(studentSubject);
         subject.getStudents().add(studentSubject);
     }
 
-    private void removeSubject(Subject subject) {
+    public void removeSubject(Subject subject) {
         StudentSubject studentSubject = new StudentSubject(this, subject);
         subjects.remove(studentSubject);
         subject.getStudents().remove(studentSubject);
@@ -45,20 +53,10 @@ public class Student {
         studentSubject.setSubject(null);
     }
 
-
-/*
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "photo_id")
-    private Photo photo;
-
-    public Photo getPhoto() {
-        return photo;
+    public void addMark(Subject subject, Mark mark) {
+        StudentSubject studentSubject = new StudentSubject(this, subject);
+        studentSubject.addMark(mark);
     }
-
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
-
 
  */
 

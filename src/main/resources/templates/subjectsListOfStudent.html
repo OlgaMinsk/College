@@ -12,7 +12,7 @@
 <header th:insert="blocks/header :: header"></header>
 <h1>Subjects list of student:</h1>
 <h2 th:text="${student.getName()} + ' ' + ${student.getSurname()}"></h2>
-<p th:text="${message}?${message}:'' " class="red"></p>
+<p th:text="${message}" class="red"></p>
 <table>
     <tbody>
     <div th:each="subject:${subjects}">
@@ -22,9 +22,9 @@
                 <div class="window">Do you want to delete the subject?<br>
                     <a href="#" class="close">No</a>
                     <form action="/deleteSubjectOfStudent" method="post">
-                        <input type="hidden" name="studentId" th:value="${student.getId()}"/>
-                        <input type="hidden" name="subjectId" th:value="${subject.getId()}"/>
-                        <input value="Yes" type="submit"/>
+                        <input type="hidden" name="studentId" th:value="${student.getId()}">
+                        <input type="hidden" name="subjectId" th:value="${subject.getId()}">
+                        <input value="Yes" type="submit">
                     </form>
                 </div>
             </div>
@@ -33,6 +33,23 @@
                 <tr>
                     <td><p th:text="${subject.getName()}"></p></td>
                     <td><p>&nbsp<a th:href="${idHref}">Delete</a>&nbsp</p></td>
+                    <td>
+                        <div th:with="link='/marksListOfStudentInSubject/'+${student.getId()}+'/'+${subject.getId()}">
+                            <a th:href="${link}">Marks list</a>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="/addMarkToStudentInSubject" method="post">
+                            <select name="markToAdd" size="1">
+                                <div th:each="mark:${marks}">
+                                    <option th:text="${mark.getName()}"></option>
+                                </div>
+                            </select>
+                            <input type="hidden" name="studentId" th:value="${student.getId()}">
+                            <input type="hidden" name="subjectId" th:value="${subject.getId()}">
+                            <input type="submit" value="Add mark">
+                        </form>
+                    </td>
                 </tr>
             </div>
         </div>

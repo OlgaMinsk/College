@@ -19,7 +19,6 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
         this.studentSubjectRepository = studentSubjectRepository;
     }
 
-
     @Override
     public Set<Student> getStudentsBySubject(Subject subject) {
         Set<StudentSubject> studentSubjects = studentSubjectRepository.getStudentSubjectBySubject(subject);
@@ -29,7 +28,6 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
             students.add(studentSubject.getStudent());
         }
         return students;
-
     }
 
     @Override
@@ -56,6 +54,16 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
         StudentSubject studentSubject = new StudentSubject();
         studentSubject = studentSubjectRepository.findBySubjectAndStudent(subject, student);
         studentSubjectRepository.deleteById(studentSubject.getId());
+    }
+
+    @Override
+    public boolean existsByStudentAndSubject(Student student, Subject subject) {
+        return studentSubjectRepository.existsStudentSubjectByStudentAndSubject(student,subject);
+    }
+
+    @Override
+    public StudentSubject findBySubjectAndStudent(Subject subject, Student student) {
+        return studentSubjectRepository.findBySubjectAndStudent(subject, student);
     }
 
 }

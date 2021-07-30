@@ -23,7 +23,7 @@ public class Subject {
     private String name;
 
     @OneToMany(mappedBy = "subject",
-    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private Set<StudentSubject> students = new HashSet<>();
 
     public Long getId() {

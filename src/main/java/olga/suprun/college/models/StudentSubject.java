@@ -3,8 +3,7 @@ package olga.suprun.college.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "student_subject",
@@ -26,6 +25,10 @@ public class StudentSubject {
     @JoinColumn(name = "subjects_id")
     private Subject subject;
 
+    @OneToMany(mappedBy = "studentSubject",
+            cascade = CascadeType.ALL)
+    private List<StudentsGrade> grade = new LinkedList<>();
+
     public StudentSubject() {
 
     }
@@ -33,6 +36,20 @@ public class StudentSubject {
     public StudentSubject(Student student, Subject subject) {
         this.student = student;
         this.subject = subject;
+    }
+
+    public StudentSubject(Student student, Subject subject, List<StudentsGrade> grade) {
+        this.student = student;
+        this.subject = subject;
+        this.grade = grade;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Student getStudent() {
@@ -51,13 +68,32 @@ public class StudentSubject {
         this.subject = subject;
     }
 
-    public Long getId() {
-        return id;
+    public List<StudentsGrade> getGrade() {
+        return grade;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setGrade(List<StudentsGrade> grade) {
+        this.grade = grade;
     }
+
+
+    /*
+        public void addMark(Mark mark) {
+            StudentsGrade studentsGrade = new StudentsGrade(this, mark);
+            this.grade.add(studentsGrade);
+            mark.getGrade().add(studentsGrade);
+        }
+
+        public void removeMark(Mark mark) {
+            StudentsGrade studentsGrade = new StudentsGrade(this, mark);
+            this.grade.remove(studentsGrade);
+            mark.getGrade().remove(studentsGrade);
+            studentsGrade.setMark(null);
+            studentsGrade.setStudentSubject(null);
+        }
+
+
+     */
 
     @Override
     public boolean equals(Object o) {

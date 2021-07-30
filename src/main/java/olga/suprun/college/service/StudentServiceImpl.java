@@ -1,5 +1,6 @@
 package olga.suprun.college.service;
 
+import olga.suprun.college.models.Mark;
 import olga.suprun.college.models.Student;
 import olga.suprun.college.models.Subject;
 import olga.suprun.college.repo.StudentRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,14 +19,17 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     private SubjectService subjectService;
     private StudentSubjectService studentSubjectService;
+    private StudentsGradeService studentsGradeService;
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository,
                               SubjectService subjectService,
-                              StudentSubjectService studentSubjectService) {
+                              StudentSubjectService studentSubjectService,
+                              StudentsGradeService studentsGradeService) {
         this.studentRepository = studentRepository;
         this.subjectService = subjectService;
         this.studentSubjectService = studentSubjectService;
+        this.studentsGradeService = studentsGradeService;
     }
 
     @Override
@@ -39,7 +44,6 @@ public class StudentServiceImpl implements StudentService {
         } else {
             throw new RuntimeException("Student not found by id " + id + ". So we can't delete it");
         }
-
     }
 
     @Override
@@ -49,9 +53,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(Long id) {
-        Optional<Student> optional = studentRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
+        if (studentRepository.getById(id) != null) {
+            return studentRepository.getById(id);
         } else {
             throw new RuntimeException("Student not found by id " + id);
         }
@@ -77,4 +80,16 @@ public class StudentServiceImpl implements StudentService {
     public void deleteSubjectOfStudent(Long subjectId, Long studentId) {
         studentSubjectService.deleteSubjectOfStudent(subjectService.getSubjectById(subjectId), this.getStudentById(studentId));
     }
+
+    @Override
+    public void addMarkToStudentInSubject(Student student, Subject subject, Mark mark) throws Exception {
+        studentsGradeService.addMarkToStudentInSubject(student, subject, mark);
+    }
+
+    @Override
+    public List<Mark> getMarksOfStudentInSubject(Student student, Subject subject) {
+        List<Mark> marks =studentsGradeService.getMarksOfStudentInSubject(student, subject);
+        return marks;
+    }
+
 }

@@ -1,8 +1,11 @@
 package olga.suprun.college.controllers;
 
+import olga.suprun.college.models.Mark;
 import olga.suprun.college.models.Student;
 import olga.suprun.college.models.Subject;
+import olga.suprun.college.service.MarkService;
 import olga.suprun.college.service.StudentService;
+import olga.suprun.college.service.StudentsGradeService;
 import olga.suprun.college.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,13 +23,20 @@ import java.util.Set;
 public class MainController {
     private StudentService studentService;
     private SubjectService subjectService;
+    private MarkService markService;
+    private StudentsGradeService studentsGradeService;
     private int pageNoDefault = 1;
     private int pageSizeDefault = 5;
 
     @Autowired
-    public MainController(StudentService studentService, SubjectService subjectService) {
+    public MainController(StudentService studentService,
+                          SubjectService subjectService,
+                          MarkService markService,
+                          StudentsGradeService studentsGradeService) {
         this.studentService = studentService;
         this.subjectService = subjectService;
+        this.markService = markService;
+        this.studentsGradeService = studentsGradeService;
     }
 
     @GetMapping("/")
@@ -73,6 +83,7 @@ public class MainController {
             model.addAttribute("pageSize", pageSize);
             return "listOfStudents";
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
         }
@@ -91,6 +102,7 @@ public class MainController {
             studentService.saveStudent(student);
             return viewPage(studentService.findPage(pageNoDefault, pageSizeDefault).getTotalPages(), pageSizeDefault, model);
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("message", "Sorry. We can't add student " + name + " " + surname + ".Something went wrong. We are already solving this problem. Please try again later");
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
@@ -109,6 +121,7 @@ public class MainController {
                 return "errorPage";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
         }
@@ -126,6 +139,7 @@ public class MainController {
             studentService.saveStudent(student);
             return viewPage(pageNoDefault, pageSizeDefault, model);
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("message", "We can't update student. " +
                     "Something went wrong. We are already solving this problem. " +
                     "Please try again later");
@@ -143,6 +157,7 @@ public class MainController {
             studentService.deleteStudentById(id);
             return viewPage(pageNo, pageSize, model);
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("message", "Sorry. We can't delete student");
             return viewPage(pageNo, pageSize, model);
         }
@@ -161,6 +176,7 @@ public class MainController {
                 return "errorPage";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
         }
@@ -198,6 +214,7 @@ public class MainController {
                 return "errorPage";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
         }
@@ -205,6 +222,7 @@ public class MainController {
 
     @GetMapping("/subjectsListOfStudent/{id}")
     public String subjectsListOfStudent(@PathVariable(value = "id") Long id,
+
                                         Model model) {
         try {
             if (studentService.studentExistsById(id)) {
@@ -212,6 +230,8 @@ public class MainController {
                 Set<Subject> subjects = studentService.getSubjectsByStudent(student);
                 model.addAttribute("student", student);
                 model.addAttribute("subjects", subjects);
+                List<Mark> marks = markService.getAll();
+                model.addAttribute("marks", marks);
                 if (subjects.isEmpty()) {
                     model.addAttribute("message", "Student " + student.getName() + " " + student.getSurname() +
                             " don't have any subjects");
@@ -223,6 +243,49 @@ public class MainController {
                 return "errorPage";
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("ErrorMessage", e.getMessage());
+            return "errorPage";
+        }
+    }
+
+    @PostMapping("/addMarkToStudentInSubject")
+    public String addMarkToStudentInSubject(@RequestParam Long subjectId,
+                                            @RequestParam Long studentId,
+                                            @RequestParam String markToAdd,
+                                            Model model) {
+        try {
+            Student student = studentService.getStudentById(studentId);
+            Subject subject = subjectService.getSubjectById(subjectId);
+            Mark mark = markService.findByMarkName(markToAdd);
+            studentService.addMarkToStudentInSubject(student, subject, mark);
+            return marksListOfStudentInSubject(studentId, subjectId,model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("ErrorMessage", e.getMessage());
+            return "errorPage";
+        }
+    }
+
+    @GetMapping("/marksListOfStudentInSubject/{studentId}/{subjectId}")
+    public String marksListOfStudentInSubject(@PathVariable(value = "studentId") Long studentId,
+                                              @PathVariable(value = "subjectId") Long subjectId,
+                                              Model model) {
+        try {
+            Student student = studentService.getStudentById(studentId);
+            Subject subject = subjectService.getSubjectById(subjectId);
+            List<Mark> marksList = studentService.getMarksOfStudentInSubject(student, subject);
+            model.addAttribute("student", student);
+            model.addAttribute("subject", subject);
+            model.addAttribute("marksList", marksList);
+            if (marksList.isEmpty()) {
+                model.addAttribute("message", "no marks yet");
+            }
+            List<Mark> marks = markService.getAll();
+            model.addAttribute("marks", marks);
+            return "markListOfStudentInSubject";
+        } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             return "errorPage";
         }
@@ -241,6 +304,7 @@ public class MainController {
             model.addAttribute("subjects", subjects);
             return "subjectsListOfStudent";
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("ErrorMessage", e.getMessage());
             e.printStackTrace();
             return "errorPage";
