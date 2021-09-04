@@ -38,27 +38,6 @@ public class Student {
     public void setSubjects(Set<StudentSubject> subjects) {
         this.subjects = subjects;
     }
-/*
-    public void addSubject(Subject subject) {
-        StudentSubject studentSubject = new StudentSubject(this, subject);
-        subjects.add(studentSubject);
-        subject.getStudents().add(studentSubject);
-    }
-
-    public void removeSubject(Subject subject) {
-        StudentSubject studentSubject = new StudentSubject(this, subject);
-        subjects.remove(studentSubject);
-        subject.getStudents().remove(studentSubject);
-        studentSubject.setStudent(null);
-        studentSubject.setSubject(null);
-    }
-
-    public void addMark(Subject subject, Mark mark) {
-        StudentSubject studentSubject = new StudentSubject(this, subject);
-        studentSubject.addMark(mark);
-    }
-
- */
 
     public Long getId() {
         return id;
@@ -107,7 +86,7 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname);
+        return Objects.hash(id);
     }
 }
 
